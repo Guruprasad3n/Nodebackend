@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors")
 const userModel = require("./Model/userModel");
 const BMIModel = require("./Model/bmiModel")
 const PORT = 8081;
@@ -8,6 +9,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors())
 
 app.get("/", async (req, res) => res.send("Welcome to Home page"));
 
