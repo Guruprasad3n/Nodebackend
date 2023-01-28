@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const userModel = require("./Model/userModel");
 const BMIModel = require("./Model/bmiModel")
-const PORT = 8080;
+const PORT = 8081;
 const app = express();
 
 
@@ -29,38 +29,39 @@ app.post("/login", async (req, res) => {
   if (user) {
     return res
       .status(200)
-      .send("Login Successful");
+      .send( user);
+    
   }
   else{
-    return res.send(401).status("Invalid Userid or Password")
+    return res.status(401).send("Invalid Userid or Password")
   }
 });
 
 app.get("/getProfile",  async (req, res) => {
-  const {name, email} = req.body
+  const {password, email} = req.body
   const user =await  userModel.findOne({email})
-res.send({name, email})
+res.send({ email})
 })
 
 
 
 app.post("/calculateBMI",  async (req, res) => {
-   const {height, weight, user_id} = req.body;
+   const {height, weight, _id} = req.body;
    const height_in_metre = Number(height)*0.3048
    const BMI = Number(weight)/(height_in_metre)**2
    const new_bmi = new BMIModel({
       BMI,
       height : height_in_metre,
       weight,
-      user_id
+      _id
    })
    await new_bmi.save()
    res.send({BMI})
 })
 
 app.get("/getCalculation",  async (req, res) => {
-  const {user_id} = req.body;
-  const all_bmi = await BMIModel.find({user_id : user_id})
+  const {_id} = req.body;
+  const all_bmi = await BMIModel.find({_id})
   res.send({history : all_bmi})
 })
 
@@ -70,6 +71,6 @@ app.get("/getCalculation",  async (req, res) => {
 mongoose.connect(`mongodb+srv://mock11:mock11@cluster0.qnjmpba.mongodb.net/?retryWrites=true&w=majority`).then(()=>{
     mongoose.set('strictQuery', false);
     app.listen(PORT, (req, res) => {
-      console.log("Port started at http://localhost:8080 ");
+      console.log("Port started at http://localhost:8081 ");
     });
 })

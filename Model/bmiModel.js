@@ -1,20 +1,25 @@
+
+// const { default: mongoose } = require("mongoose");
+
 const {Schema, model } = require("mongoose");
 
-const userSchema = new Schema({
-    name:{
-        type:String,
+const bmiSchema = new Schema({
+    height:{
+        type:Number,
         require:true
     },
-    email:{
-        type:String,
+    weight:{
+        type:Number,
         require:true,
-        unique:true
     },
-    password:{
+    _id:{
         type:String,
         require:true
     },
+    BMI:{
+        type:String
+    }
 })
 
-const userModel = model("user", userSchema)
-module.exports = userModel
+const BMIModel = model("bmi", bmiSchema)
+module.exports = BMIModel
